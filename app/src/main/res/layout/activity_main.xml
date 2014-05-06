@@ -9,8 +9,14 @@
     tools:context="com.cooltoast.whereismychild.app.MainActivity">
 
     <TextView
-        android:text="@string/hello_world"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:text="track the chillun"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button1"/>
 
 </RelativeLayout>
