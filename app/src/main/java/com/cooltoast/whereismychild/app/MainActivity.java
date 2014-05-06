@@ -6,11 +6,22 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Date;
 
 
 public class MainActivity extends Activity {
@@ -26,10 +37,35 @@ public class MainActivity extends Activity {
         Button b = (Button) findViewById(R.id.button1);
         final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, new LocationListener() {
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1200000, 500, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-               Toast.makeText(MainActivity.this, "Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude(), Toast.LENGTH_LONG).show();
+               Toast.makeText(MainActivity.this, "Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+
+               String date = DateUtils.formatElapsedTime(location.getTime());
+
+               final String url = "http://10.0.0.125:5000/submit_coordinates?latitude=" + location.getLatitude() + "&longitude=" + location.getLongitude() + "&timestamp=" + date;
+
+
+               new Thread(new Runnable() {
+                       @Override
+                       public void run() {
+
+                           try{
+                               HttpClient httpclient = new DefaultHttpClient();
+
+                               HttpGet request = new HttpGet();
+                               URI website = new URI(url);
+                               request.setURI(website);
+                               httpclient.execute(request);
+                           }
+                           catch (Exception e)
+                           {
+                               e.printStackTrace();
+                           }
+                       }
+               }).start();
+
             }
 
             @Override
