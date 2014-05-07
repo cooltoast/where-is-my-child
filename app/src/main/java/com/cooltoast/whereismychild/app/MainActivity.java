@@ -37,14 +37,14 @@ public class MainActivity extends Activity {
         Button b = (Button) findViewById(R.id.button1);
         final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1200000, 500, new LocationListener() {
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 600000, 10000, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                Toast.makeText(MainActivity.this, "Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
 
                String date = DateUtils.formatElapsedTime(location.getTime());
 
-               final String url = "http://10.0.0.125:5000/submit_coordinates?latitude=" + location.getLatitude() + "&longitude=" + location.getLongitude() + "&timestamp=" + date;
+               final String url = "http://where-is-my-child.herokuapp.com/submit_coordinates?latitude=" + location.getLatitude() + "&longitude=" + location.getLongitude() + "&timestamp=" + date;
 
 
                new Thread(new Runnable() {
